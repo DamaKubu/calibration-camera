@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>C:\Users\IT Logika\Documents\CALIBRATION\build\x64\Release\ZERO_CHECK</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\IT Logika\Documents\CALIBRATION\build\Release\camera_true_id.exe</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\IT Logika\Documents\CALIBRATION\build\Release\capture.exe</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\IT Logika\Documents\CALIBRATION\build\Release\dual_camera_preview_by_id.exe</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\IT Logika\Documents\CALIBRATION\build\Release\extrinsic.exe</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\IT Logika\Documents\CALIBRATION\build\Release\intrinsic.exe</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\IT Logika\Documents\CALIBRATION\build\Release\stereo_capture_pairs_by_id.exe</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\IT Logika\Documents\CALIBRATION\build\Release\stereo_extrinsic_from_pairs.exe</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\IT Logika\Documents\CALIBRATION\build\x64\Release\ALL_BUILD</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles />
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>

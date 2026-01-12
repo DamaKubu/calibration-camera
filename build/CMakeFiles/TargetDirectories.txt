@@ -1,0 +1,9 @@
+C:/Users/IT Logika/Documents/CALIBRATION/build/CMakeFiles/capture.dir
+C:/Users/IT Logika/Documents/CALIBRATION/build/CMakeFiles/intrinsic.dir
+C:/Users/IT Logika/Documents/CALIBRATION/build/CMakeFiles/extrinsic.dir
+C:/Users/IT Logika/Documents/CALIBRATION/build/CMakeFiles/camera_true_id.dir
+C:/Users/IT Logika/Documents/CALIBRATION/build/CMakeFiles/dual_camera_preview_by_id.dir
+C:/Users/IT Logika/Documents/CALIBRATION/build/CMakeFiles/stereo_capture_pairs_by_id.dir
+C:/Users/IT Logika/Documents/CALIBRATION/build/CMakeFiles/stereo_extrinsic_from_pairs.dir
+C:/Users/IT Logika/Documents/CALIBRATION/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/IT Logika/Documents/CALIBRATION/build/CMakeFiles/ZERO_CHECK.dir

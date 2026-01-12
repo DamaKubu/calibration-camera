@@ -1,0 +1,78 @@
+%YAML:1.0
+---
+build: "Jan 12 2026 16:35:10"
+model: "standard"
+pattern_cols: 8
+pattern_rows: 5
+square_mm: 65.0000000000
+image_width: 1080
+image_height: 1920
+used_images: 36
+rejected_images: 16
+rms_solver_px: 1.2285890119
+mean_reproj_px: 0.9266642152
+max_reproj_px: 3.0425073315
+camera_matrix: !!opencv-matrix
+   rows: 3
+   cols: 3
+   dt: d
+   data: [ 967.225382644144702, 0.000000000000000, 577.259638951663987, 0.000000000000000, 971.253541137786783, 917.100121347202162, 0.000000000000000, 0.000000000000000, 1.000000000000000 ]
+distortion_coefficients: !!opencv-matrix
+   rows: 14
+   cols: 1
+   dt: d
+   data: [ 0.142464434117899, -0.154154467394300, 0.000183270492854, 0.001230750658507, -0.007945609365075, 0.545022274324530, -0.188677850587605, -0.046408735588680, 0.000000000000000, 0.000000000000000, 0.000000000000000, 0.000000000000000, 0.000000000000000, 0.000000000000000 ]
+per_image_reproj_error_px:
+  calib_0001.png: 0.370487
+  calib_0005.png: 2.841952
+  calib_0006.png: 0.641547
+  calib_0012.png: 2.994024
+  calib_0015.png: 0.477582
+  calib_0019.png: 0.480788
+  calib_0020.png: 0.648162
+  calib_0021.png: 0.453992
+  calib_0023.png: 3.042507
+  calib_0024.png: 0.646000
+  calib_0025.png: 0.686181
+  calib_0026.png: 0.629547
+  calib_0027.png: 0.518468
+  calib_0028.png: 0.486116
+  calib_0029.png: 0.497087
+  calib_0030.png: 0.848548
+  calib_0033.png: 2.392731
+  calib_0034.png: 0.604567
+  calib_0035.png: 0.465099
+  calib_0036.png: 0.511597
+  calib_0037.png: 0.470869
+  calib_0039.png: 0.547763
+  calib_0040.png: 0.523101
+  calib_0041.png: 0.620169
+  calib_0042.png: 0.590002
+  calib_0043.png: 0.612012
+  calib_0044.png: 0.675942
+  calib_0045.png: 0.733192
+  calib_0046.png: 0.674903
+  calib_0047.png: 0.409848
+  calib_0050.png: 2.759177
+  calib_0051.png: 2.315705
+  calib_0052.png: 0.884124
+  calib_0053.png: 0.421665
+  calib_0054.png: 0.567339
+  calib_0058.png: 0.764274
+rejected_images_detail:
+  - { file: "calib_0008.png", error_px: 13.301109 }
+  - { file: "calib_0016.png", error_px: 12.778426 }
+  - { file: "calib_0010.png", error_px: 11.277569 }
+  - { file: "calib_0011.png", error_px: 10.281425 }
+  - { file: "calib_0017.png", error_px: 8.693465 }
+  - { file: "calib_0007.png", error_px: 7.908081 }
+  - { file: "calib_0009.png", error_px: 6.419868 }
+  - { file: "calib_0049.png", error_px: 5.716875 }
+  - { file: "calib_0014.png", error_px: 5.681630 }
+  - { file: "calib_0057.png", error_px: 5.095991 }
+  - { file: "calib_0003.png", error_px: 3.340807 }
+  - { file: "calib_0038.png", error_px: 3.339144 }
+  - { file: "calib_0018.png", error_px: 3.254107 }
+  - { file: "calib_0059.png", error_px: 3.206015 }
+  - { file: "calib_0056.png", error_px: 3.097462 }
+  - { file: "calib_0022.png", error_px: 3.042507 }
