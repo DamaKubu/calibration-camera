@@ -8,10 +8,10 @@ Date: 2026-01-12
 This repo builds small calibration tools (C++17) using OpenCV:
 
 - capture   : saves calibration images from a camera
+- capture_multiple : saves synchronized shots for multi-camera extrinsic (2..6 cams)
 - intrinsic : computes camera intrinsics from a folder of chessboard images
 - extrinsic : estimates a single pose (rvec/tvec) using intrinsics + one image
 
-Optional:
 - camera_true_id : lists Windows camera device IDs (Media Foundation) so you can
                    bind calibration to the real physical device.
 
@@ -36,7 +36,9 @@ Folder layout:
 
 Notes:
 - CUDA support is assumed to be compiled into your OpenCV build.
-- No Python, no vcpkg, no Conan, no FetchContent.
+- YAML parsing uses yaml-cpp.
+  - If yaml-cpp is installed, CMake will use it.
+  - Otherwise CMake will FetchContent yaml-cpp (needs Git + internet at configure time).
 
 =====================================================
 3) Build (recommended)
@@ -47,15 +49,17 @@ From the project root (the folder that contains CMakeLists.txt):
 
   cd C:\Users\IT Logika\Documents\CALIBRATION
 
-  cmake -S . -B build -G "Visual Studio 17 2022"
+  cmake -S . -B build -G "Visual Studio 17 2022" -A x64
   cmake --build build --config Release
 
 
 
 Outputs:
 - build\Release\capture.exe
+- build\Release\capture_multiple.exe
 - build\Release\intrinsic.exe
 - build\Release\extrinsic.exe
+- build\Release\camera_true_id.exe
 
 =====================================================
 4) Runtime DLL rule (important)
@@ -124,15 +128,50 @@ Why:
 - Windows Media Foundation exposes a "symbolic_link" string that is much more
   stable for identifying a physical device.
 
-Build with the optional target:
-  cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DBUILD_CAMERA_TRUE_ID=ON
-  cmake --build build --config Release
-
 Run:
   build\Release\camera_true_id.exe
 
 Store the printed symbolic_link inside your calibration YAML so you always know
 which camera the calibration belongs to.
+
+IMPORTANT cameras.yml formatting:
+- Use single quotes for symbolic_link values, like:
+    symbolic_link: '\\?\usb#vid_....\\global'
+  This keeps it valid YAML ("\\u" inside double quotes is treated as an escape).
+
+=====================================================
+8) Multi-camera capture (2..6 cameras): capture_multiple
+=====================================================
+
+Goal:
+- Capture synchronized "shots" for multi-camera extrinsic calibration.
+- It only shows GOOD when ALL cameras detect the chessboard and the board is stable.
+
+Run (example 2 cams):
+  build\Release\capture_multiple.exe --cams cam1,cam2 --count 60 --auto
+
+Run (example 4 cams):
+  build\Release\capture_multiple.exe --cams cam1,cam2,cam3,cam4 --count 80 --auto
+
+Output:
+- data\extrinsic_multi\session_YYYYMMDD_HHMMSS\
+  - shot_0000_cam1.png, shot_0000_cam2.png, ...
+  - shot_0000.yml (per-shot manifest)
+  - session.yml (session metadata)
+
+Controls:
+- Space : save one shot (all cams)
+- A     : toggle auto mode
+- Esc   : quit
+
+Quality tuning (for high precision):
+- --max-motion-px 0.25   (lower = stricter)
+- --stable-frames 6      (higher = stricter)
+- --min-border-px 20     (increase to avoid edge distortion)
+- --min-board-px 20      (increase to force closer board)
+
+CUDA note:
+- You can try --cuda-preprocess to run grayscale conversion on GPU if your OpenCV build has cudaimgproc.
 
   =====================================================
   8) Stereo: capture PAIRS + stereo extrinsics

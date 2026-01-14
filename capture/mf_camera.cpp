@@ -10,9 +10,10 @@
 #include <mfreadwrite.h>
 
 #include <algorithm>
-#include <fstream>
 #include <iostream>
 #include <memory>
+
+#include <yaml-cpp/yaml.h>
 
 #pragma comment(lib, "mfplat.lib")
 #pragma comment(lib, "mf.lib")
@@ -65,18 +66,19 @@ static std::wstring canonicalizeSymbolicLinkW(const std::wstring& w) {
 
     return toLowerW(out);
 }
-
-static std::wstring stripGlobalSuffixW(std::wstring s) {
+static std::wstring stripGlobalSuffixW(const std::wstring& s) {
     if (s.size() >= 7) {
         const std::wstring suf1 = L"\\global";
         const std::wstring suf2 = L"/global";
         if (s.size() >= suf1.size() && s.compare(s.size() - suf1.size(), suf1.size(), suf1) == 0) {
-            s.erase(s.size() - suf1.size());
-            return s;
+            std::wstring result = s;
+            result.erase(result.size() - suf1.size());
+            return result;
         }
         if (s.size() >= suf2.size() && s.compare(s.size() - suf2.size(), suf2.size(), suf2) == 0) {
-            s.erase(s.size() - suf2.size());
-            return s;
+            std::wstring result = s;
+            result.erase(result.size() - suf2.size());
+            return result;
         }
     }
     return s;
@@ -194,8 +196,12 @@ static bool openBySymbolicLink(const std::string& symbolicLink, com_ptr<IMFMedia
         }
     }
 
-    for (UINT32 i = 0; i < count; ++i) devices[i]->Release();
-    CoTaskMemFree(devices);
+    auto cleanupDevices = [&]() {
+        for (UINT32 j = 0; j < count; ++j) devices[j]->Release();
+        CoTaskMemFree(devices);
+        devices = nullptr;
+        count = 0;
+    };
 
     if (!source) {
         std::wcerr << L"MF open failed: no device matched symbolic_link\n";
@@ -220,8 +226,11 @@ static bool openBySymbolicLink(const std::string& symbolicLink, com_ptr<IMFMedia
             }
         }
 
+        cleanupDevices();
         return false;
     }
+
+    cleanupDevices();
 
     IMFSourceReader* reader = nullptr;
     hr = MFCreateSourceReaderFromMediaSource(source, nullptr, &reader);
@@ -396,95 +405,18 @@ void Camera::close() {
     impl_->formatKnown = false;
 }
 
-static std::string trim(std::string s) {
-    auto isSpace = [](unsigned char c) { return c == ' ' || c == '\t' || c == '\r' || c == '\n'; };
-    while (!s.empty() && isSpace((unsigned char)s.front())) s.erase(s.begin());
-    while (!s.empty() && isSpace((unsigned char)s.back())) s.pop_back();
-    return s;
-}
-
-static bool startsWith(const std::string& s, const std::string& prefix) {
-    return s.size() >= prefix.size() && s.compare(0, prefix.size(), prefix) == 0;
-}
-
-static int countLeadingBackslashes(const std::string& s) {
-    int n = 0;
-    while (n < (int)s.size() && s[(size_t)n] == '\\') ++n;
-    return n;
-}
-
-static std::string decodeBackslashPairs(const std::string& s) {
-    std::string out;
-    out.reserve(s.size());
-    for (size_t i = 0; i < s.size(); ++i) {
-        const char c = s[i];
-        if (c == '\\' && i + 1 < s.size() && s[i + 1] == '\\') {
-            out.push_back('\\');
-            ++i;
-            continue;
-        }
-        out.push_back(c);
-    }
-    return out;
-}
-
-static std::string stripOptionalQuotes(const std::string& s) {
-    if (s.size() >= 2) {
-        const char q0 = s.front();
-        const char q1 = s.back();
-        if ((q0 == '"' && q1 == '"') || (q0 == '\'' && q1 == '\'')) {
-            return s.substr(1, s.size() - 2);
-        }
-    }
-    return s;
-}
-
 bool loadSymbolicLinkFromCamerasYml(const fs::path& ymlPath, const std::string& camKey, std::string& outLink) {
     outLink.clear();
-    std::ifstream in(ymlPath);
-    if (!in) return false;
-
-    const std::string keyLine = camKey + ":";
-    bool inKey = false;
-
-    std::string line;
-    while (std::getline(in, line)) {
-        const std::string raw = line;
-        std::string t = trim(raw);
-        if (t.empty() || startsWith(t, "#")) continue;
-
-        // New top-level key starts (no indentation)
-        const bool isTopLevel = !raw.empty() && (raw[0] != ' ' && raw[0] != '\t');
-        if (isTopLevel && t.size() > 1 && t.back() == ':' && t != keyLine) {
-            inKey = false;
-        }
-        if (isTopLevel && t == keyLine) {
-            inKey = true;
-            continue;
-        }
-
-        if (!inKey) continue;
-
-        // Expect indented properties
-        if (startsWith(t, "symbolic_link:")) {
-            std::string v = trim(t.substr(std::string("symbolic_link:").size()));
-            v = stripOptionalQuotes(v);
-            v = trim(v);
-
-            // If the file used doubled backslashes (common in YAML/JSON style), decode pairs.
-            // We only do this when the value begins with 4+ backslashes to avoid breaking
-            // already-correct strings that start with "\\?\".
-            if (countLeadingBackslashes(v) >= 4) {
-                v = decodeBackslashPairs(v);
-            }
-
-            if (v.empty()) return false;
-            outLink = v;
-            return true;
-        }
+    try {
+        YAML::Node root = YAML::LoadFile(ymlPath.string());
+        if (!root[camKey]) return false;
+        YAML::Node cam = root[camKey];
+        if (!cam["symbolic_link"]) return false;
+        outLink = cam["symbolic_link"].as<std::string>();
+        return !outLink.empty();
+    } catch (...) {
+        return false;
     }
-
-    return false;
 }
 
 fs::path findUpwardsForFile(const fs::path& startDir, const fs::path& filename, int maxHops) {

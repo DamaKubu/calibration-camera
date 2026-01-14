@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\IT Logika\Documents\CALIBRATION\build\CMakeFiles\cc8238d16cef1a262edd3db4febf0097\Continuous.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\IT Logika\Documents\CALIBRATION\build\_deps\yaml-cpp-src\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\IT Logika\Documents\CALIBRATION\build\_deps\yaml-cpp-build\CMakeFiles\Continuous" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{90783555-44F6-35A5-AE3E-4FF6622F7B56}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,900 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.20"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14
+					]
+				},
+				{
+					"build" : "_deps/yaml-cpp-build",
+					"jsonFile" : "directory-_deps.yaml-cpp-build-Debug-5bd3610164adf9ed9cc3.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.4"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "build/_deps/yaml-cpp-src",
+					"targetIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4,
+						5,
+						15,
+						16
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "camera_calibration_cuda",
+					"targetIndexes" : 
+					[
+						0,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "YAML_CPP",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4,
+						5,
+						15,
+						16
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ALL_BUILD::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ALL_BUILD-Debug-2d256bd93f4c1ed255a7.json",
+					"name" : "ALL_BUILD",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ALL_BUILD::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-ALL_BUILD-Debug-99a2b2eda780259342bf.json",
+					"name" : "ALL_BUILD",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "Continuous::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-Continuous-Debug-4d93d341a3e88f90fa49.json",
+					"name" : "Continuous",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "Experimental::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-Experimental-Debug-181bc8743cd712beb034.json",
+					"name" : "Experimental",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "Nightly::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-Nightly-Debug-c6d3055e5459d43ae119.json",
+					"name" : "Nightly",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "NightlyMemoryCheck::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-NightlyMemoryCheck-Debug-6f02ad1db271444aaddf.json",
+					"name" : "NightlyMemoryCheck",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ZERO_CHECK-Debug-10d90069dbd481dcc2c2.json",
+					"name" : "ZERO_CHECK",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "camera_true_id::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-camera_true_id-Debug-d446dd3bd1649696ac2f.json",
+					"name" : "camera_true_id",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "capture::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-capture-Debug-f28a4688afd6cce2d527.json",
+					"name" : "capture",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "capture_intrinsic::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-capture_intrinsic-Debug-0ede770a2dc50bca272c.json",
+					"name" : "capture_intrinsic",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "capture_multiple::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-capture_multiple-Debug-66c0e0f55108625cec73.json",
+					"name" : "capture_multiple",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "extrinsic::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-extrinsic-Debug-b569170ebdcd911e6316.json",
+					"name" : "extrinsic",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "intrinsic::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-intrinsic-Debug-4957d976c527292308e6.json",
+					"name" : "intrinsic",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mf_camera::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mf_camera-Debug-3657841337f6acc49aa5.json",
+					"name" : "mf_camera",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "stereo_extrinsic_from_pairs::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-stereo_extrinsic_from_pairs-Debug-cf333e895f82833bc352.json",
+					"name" : "stereo_extrinsic_from_pairs",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "uninstall::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-uninstall-Debug-959f10c9fc56e432102c.json",
+					"name" : "uninstall",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "yaml-cpp::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-yaml-cpp-Debug-6e814ef7179c84178261.json",
+					"name" : "yaml-cpp",
+					"projectIndex" : 1
+				}
+			]
+		},
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"jsonFile" : "directory-.-Release-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.20"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14
+					]
+				},
+				{
+					"build" : "_deps/yaml-cpp-build",
+					"jsonFile" : "directory-_deps.yaml-cpp-build-Release-5bd3610164adf9ed9cc3.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.4"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "build/_deps/yaml-cpp-src",
+					"targetIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4,
+						5,
+						15,
+						16
+					]
+				}
+			],
+			"name" : "Release",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "camera_calibration_cuda",
+					"targetIndexes" : 
+					[
+						0,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "YAML_CPP",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4,
+						5,
+						15,
+						16
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ALL_BUILD::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ALL_BUILD-Release-2d256bd93f4c1ed255a7.json",
+					"name" : "ALL_BUILD",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ALL_BUILD::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-ALL_BUILD-Release-99a2b2eda780259342bf.json",
+					"name" : "ALL_BUILD",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "Continuous::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-Continuous-Release-4d93d341a3e88f90fa49.json",
+					"name" : "Continuous",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "Experimental::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-Experimental-Release-181bc8743cd712beb034.json",
+					"name" : "Experimental",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "Nightly::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-Nightly-Release-c6d3055e5459d43ae119.json",
+					"name" : "Nightly",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "NightlyMemoryCheck::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-NightlyMemoryCheck-Release-6f02ad1db271444aaddf.json",
+					"name" : "NightlyMemoryCheck",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ZERO_CHECK-Release-10d90069dbd481dcc2c2.json",
+					"name" : "ZERO_CHECK",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "camera_true_id::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-camera_true_id-Release-baf7e722f260a8b163b7.json",
+					"name" : "camera_true_id",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "capture::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-capture-Release-39943ddd2d46508c4609.json",
+					"name" : "capture",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "capture_intrinsic::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-capture_intrinsic-Release-2c08e2c1676884db09ad.json",
+					"name" : "capture_intrinsic",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "capture_multiple::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-capture_multiple-Release-2709185ed405cf17a1a3.json",
+					"name" : "capture_multiple",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "extrinsic::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-extrinsic-Release-e2690a18c5787e493931.json",
+					"name" : "extrinsic",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "intrinsic::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-intrinsic-Release-a0ac03ee64932e96c782.json",
+					"name" : "intrinsic",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mf_camera::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mf_camera-Release-705e374704dbd773423a.json",
+					"name" : "mf_camera",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "stereo_extrinsic_from_pairs::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-stereo_extrinsic_from_pairs-Release-443fab7b28113d70bfc5.json",
+					"name" : "stereo_extrinsic_from_pairs",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "uninstall::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-uninstall-Release-959f10c9fc56e432102c.json",
+					"name" : "uninstall",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "yaml-cpp::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-yaml-cpp-Release-1e0754202a93c4c4d3d5.json",
+					"name" : "yaml-cpp",
+					"projectIndex" : 1
+				}
+			]
+		},
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"jsonFile" : "directory-.-MinSizeRel-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.20"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14
+					]
+				},
+				{
+					"build" : "_deps/yaml-cpp-build",
+					"jsonFile" : "directory-_deps.yaml-cpp-build-MinSizeRel-5bd3610164adf9ed9cc3.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.4"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "build/_deps/yaml-cpp-src",
+					"targetIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4,
+						5,
+						15,
+						16
+					]
+				}
+			],
+			"name" : "MinSizeRel",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "camera_calibration_cuda",
+					"targetIndexes" : 
+					[
+						0,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "YAML_CPP",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4,
+						5,
+						15,
+						16
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ALL_BUILD::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ALL_BUILD-MinSizeRel-2d256bd93f4c1ed255a7.json",
+					"name" : "ALL_BUILD",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ALL_BUILD::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-ALL_BUILD-MinSizeRel-99a2b2eda780259342bf.json",
+					"name" : "ALL_BUILD",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "Continuous::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-Continuous-MinSizeRel-4d93d341a3e88f90fa49.json",
+					"name" : "Continuous",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "Experimental::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-Experimental-MinSizeRel-181bc8743cd712beb034.json",
+					"name" : "Experimental",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "Nightly::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-Nightly-MinSizeRel-c6d3055e5459d43ae119.json",
+					"name" : "Nightly",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "NightlyMemoryCheck::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-NightlyMemoryCheck-MinSizeRel-6f02ad1db271444aaddf.json",
+					"name" : "NightlyMemoryCheck",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ZERO_CHECK-MinSizeRel-10d90069dbd481dcc2c2.json",
+					"name" : "ZERO_CHECK",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "camera_true_id::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-camera_true_id-MinSizeRel-8e809be1fb61aed83222.json",
+					"name" : "camera_true_id",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "capture::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-capture-MinSizeRel-f449a226eb521717188b.json",
+					"name" : "capture",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "capture_intrinsic::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-capture_intrinsic-MinSizeRel-0620c8d58d934c6e0b85.json",
+					"name" : "capture_intrinsic",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "capture_multiple::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-capture_multiple-MinSizeRel-24d4e42431526b0d6569.json",
+					"name" : "capture_multiple",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "extrinsic::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-extrinsic-MinSizeRel-378a11a93e3189eb8ba3.json",
+					"name" : "extrinsic",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "intrinsic::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-intrinsic-MinSizeRel-133024ab9f54bf61249e.json",
+					"name" : "intrinsic",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mf_camera::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mf_camera-MinSizeRel-d58b3cc246b22650aa41.json",
+					"name" : "mf_camera",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "stereo_extrinsic_from_pairs::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-stereo_extrinsic_from_pairs-MinSizeRel-d5ccfa5a5fc5b95caac8.json",
+					"name" : "stereo_extrinsic_from_pairs",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "uninstall::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-uninstall-MinSizeRel-959f10c9fc56e432102c.json",
+					"name" : "uninstall",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "yaml-cpp::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-yaml-cpp-MinSizeRel-237c29c17311b3969227.json",
+					"name" : "yaml-cpp",
+					"projectIndex" : 1
+				}
+			]
+		},
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"jsonFile" : "directory-.-RelWithDebInfo-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.20"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14
+					]
+				},
+				{
+					"build" : "_deps/yaml-cpp-build",
+					"jsonFile" : "directory-_deps.yaml-cpp-build-RelWithDebInfo-5bd3610164adf9ed9cc3.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.4"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "build/_deps/yaml-cpp-src",
+					"targetIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4,
+						5,
+						15,
+						16
+					]
+				}
+			],
+			"name" : "RelWithDebInfo",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "camera_calibration_cuda",
+					"targetIndexes" : 
+					[
+						0,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "YAML_CPP",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4,
+						5,
+						15,
+						16
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ALL_BUILD::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ALL_BUILD-RelWithDebInfo-2d256bd93f4c1ed255a7.json",
+					"name" : "ALL_BUILD",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ALL_BUILD::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-ALL_BUILD-RelWithDebInfo-99a2b2eda780259342bf.json",
+					"name" : "ALL_BUILD",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "Continuous::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-Continuous-RelWithDebInfo-4d93d341a3e88f90fa49.json",
+					"name" : "Continuous",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "Experimental::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-Experimental-RelWithDebInfo-181bc8743cd712beb034.json",
+					"name" : "Experimental",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "Nightly::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-Nightly-RelWithDebInfo-c6d3055e5459d43ae119.json",
+					"name" : "Nightly",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "NightlyMemoryCheck::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-NightlyMemoryCheck-RelWithDebInfo-6f02ad1db271444aaddf.json",
+					"name" : "NightlyMemoryCheck",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ZERO_CHECK-RelWithDebInfo-10d90069dbd481dcc2c2.json",
+					"name" : "ZERO_CHECK",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "camera_true_id::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-camera_true_id-RelWithDebInfo-65d49920f5a979b5364f.json",
+					"name" : "camera_true_id",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "capture::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-capture-RelWithDebInfo-44518f08782d7a4b7f7c.json",
+					"name" : "capture",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "capture_intrinsic::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-capture_intrinsic-RelWithDebInfo-2109a85dcf38f05c03c5.json",
+					"name" : "capture_intrinsic",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "capture_multiple::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-capture_multiple-RelWithDebInfo-ee516cb88b7bc447aba1.json",
+					"name" : "capture_multiple",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "extrinsic::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-extrinsic-RelWithDebInfo-9fcdeae6ac12107dd25a.json",
+					"name" : "extrinsic",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "intrinsic::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-intrinsic-RelWithDebInfo-fd807a1b677062fa712a.json",
+					"name" : "intrinsic",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mf_camera::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mf_camera-RelWithDebInfo-95e1468575f3b4dcc3ef.json",
+					"name" : "mf_camera",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "stereo_extrinsic_from_pairs::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-stereo_extrinsic_from_pairs-RelWithDebInfo-345be07b8a067d6d43eb.json",
+					"name" : "stereo_extrinsic_from_pairs",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "uninstall::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-uninstall-RelWithDebInfo-959f10c9fc56e432102c.json",
+					"name" : "uninstall",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "yaml-cpp::@c1fb6b535d5396bcd0b2",
+					"jsonFile" : "target-yaml-cpp-RelWithDebInfo-879fe7a26c69a322486e.json",
+					"name" : "yaml-cpp",
+					"projectIndex" : 1
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/IT Logika/Documents/CALIBRATION/build",
+		"source" : "C:/Users/IT Logika/Documents/CALIBRATION"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}

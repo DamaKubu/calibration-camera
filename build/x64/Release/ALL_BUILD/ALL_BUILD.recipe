@@ -11,7 +11,7 @@
       <FullPath>C:\Users\IT Logika\Documents\CALIBRATION\build\Release\capture.exe</FullPath>
     </ProjectOutput>
     <ProjectOutput>
-      <FullPath>C:\Users\IT Logika\Documents\CALIBRATION\build\Release\dual_camera_preview_by_id.exe</FullPath>
+      <FullPath>C:\Users\IT Logika\Documents\CALIBRATION\build\Release\capture_multiple.exe</FullPath>
     </ProjectOutput>
     <ProjectOutput>
       <FullPath>C:\Users\IT Logika\Documents\CALIBRATION\build\Release\extrinsic.exe</FullPath>
@@ -20,13 +20,13 @@
       <FullPath>C:\Users\IT Logika\Documents\CALIBRATION\build\Release\intrinsic.exe</FullPath>
     </ProjectOutput>
     <ProjectOutput>
-      <FullPath>C:\Users\IT Logika\Documents\CALIBRATION\build\Release\single_camera_capture_and_extrinsic_by_yml.exe</FullPath>
+      <FullPath>C:\Users\IT Logika\Documents\CALIBRATION\build\_deps\yaml-cpp-build\util\Release\parse.exe</FullPath>
     </ProjectOutput>
     <ProjectOutput>
-      <FullPath>C:\Users\IT Logika\Documents\CALIBRATION\build\Release\stereo_capture_pairs_by_id.exe</FullPath>
+      <FullPath>C:\Users\IT Logika\Documents\CALIBRATION\build\_deps\yaml-cpp-build\util\Release\read.exe</FullPath>
     </ProjectOutput>
     <ProjectOutput>
-      <FullPath>C:\Users\IT Logika\Documents\CALIBRATION\build\Release\stereo_extrinsic_from_pairs.exe</FullPath>
+      <FullPath>C:\Users\IT Logika\Documents\CALIBRATION\build\_deps\yaml-cpp-build\util\Release\sandbox.exe</FullPath>
     </ProjectOutput>
     <ProjectOutput>
       <FullPath>C:\Users\IT Logika\Documents\CALIBRATION\build\x64\Release\ALL_BUILD</FullPath>
