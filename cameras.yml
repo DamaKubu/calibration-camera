@@ -30,12 +30,12 @@ cam2:
 
 cam3:
   friendly_name: "USB Camera"
-  symbolic_link: "\\\\?\\usb#vid_0c45&pid_6360&mi_00#7&59e0161&0&0000#{e5323777-f976-4f5b-9b55-b94699c46e44}\\global"
+  symbolic_link: "\\\\?\\usb#vid_0c45&pid_6360&mi_00#7&16aedc4&0&0000#{e5323777-f976-4f5b-9b55-b94699c46e44}\\global"
   vid: "0c45"
   pid: "6360"
 
 cam4:
   friendly_name: "USB Camera"
-  symbolic_link: "\\\\?\\usb#vid_0c45&pid_6360&mi_00#7&16aedc4&0&0000#{e5323777-f976-4f5b-9b55-b94699c46e44}\\global"
+  symbolic_link: "\\\\?\\usb#vid_0c45&pid_6360&mi_00#7&59e0161&0&0000#{e5323777-f976-4f5b-9b55-b94699c46e44}\\global"
   vid: "0c45"
   pid: "6360"
