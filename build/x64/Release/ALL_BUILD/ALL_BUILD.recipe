@@ -20,6 +20,9 @@
       <FullPath>C:\Users\IT Logika\Documents\CALIBRATION\build\Release\intrinsic.exe</FullPath>
     </ProjectOutput>
     <ProjectOutput>
+      <FullPath>C:\Users\IT Logika\Documents\CALIBRATION\build\Release\single_camera_capture_and_extrinsic_by_yml.exe</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
       <FullPath>C:\Users\IT Logika\Documents\CALIBRATION\build\Release\stereo_capture_pairs_by_id.exe</FullPath>
     </ProjectOutput>
     <ProjectOutput>

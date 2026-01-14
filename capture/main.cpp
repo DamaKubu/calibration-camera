@@ -7,11 +7,19 @@
 #include <sstream>
 #include <string>
 
+#include "mf_camera.h"
+
 namespace fs = std::filesystem;
 
 int main(int argc, char** argv) {
     int cameraIndex = 0;
     std::string cameraId = "cam0";
+    std::string camKey;
+    std::string camerasYml;
+    std::string symbolicLink;
+    unsigned reqWidth = 0;
+    unsigned reqHeight = 0;
+    unsigned reqFps = 0;
     int count = 60;
     int intervalMs = 0;
     int pngCompression = 0;
@@ -30,6 +38,18 @@ int main(int argc, char** argv) {
             cameraIndex = std::stoi(need("--camera"));
         } else if (a == "--camera-id") {
             cameraId = need("--camera-id");
+        } else if (a == "--cam") {
+            camKey = need("--cam");
+        } else if (a == "--cameras-yml") {
+            camerasYml = need("--cameras-yml");
+        } else if (a == "--symbolic-link") {
+            symbolicLink = need("--symbolic-link");
+        } else if (a == "--width") {
+            reqWidth = (unsigned)std::stoul(need("--width"));
+        } else if (a == "--height") {
+            reqHeight = (unsigned)std::stoul(need("--height"));
+        } else if (a == "--fps") {
+            reqFps = (unsigned)std::stoul(need("--fps"));
         } else if (a == "--count") {
             count = std::stoi(need("--count"));
         } else if (a == "--interval-ms") {
@@ -43,6 +63,8 @@ int main(int argc, char** argv) {
                 << "capture\\n"
                 << "Usage:\\n"
                 << "  capture.exe --camera 0 --camera-id cam0 --count 60 [--interval-ms 0]\\n"
+                << "  capture.exe --cam cam1 --count 60 [--cameras-yml cameras.yml] [--width 1280 --height 720 --fps 30]\\n"
+                << "  capture.exe --symbolic-link \\\"\\\\\\\\?\\\\usb#...\\\" --count 60 [--width 1280 --height 720 --fps 30]\\n"
                 << "\\n"
                 << "Saves images to: data/<camera_id>/img_*.png\\n"
                 << "Controls: [Space]=save  [Esc]=quit\\n";
@@ -58,7 +80,45 @@ int main(int argc, char** argv) {
         return 2;
     }
 
-    const fs::path outDir = fs::path("data") / cameraId;
+    if (!camKey.empty() && !symbolicLink.empty()) {
+        std::cerr << "ERROR: Use only one of --cam or --symbolic-link\n";
+        return 2;
+    }
+
+    fs::path projectRoot;
+    if (!camerasYml.empty()) {
+        projectRoot = fs::absolute(fs::path(camerasYml)).parent_path();
+    } else {
+        fs::path start = fs::current_path();
+        fs::path cmake = mfcam::findUpwardsForFile(start, "CMakeLists.txt");
+        if (!cmake.empty()) projectRoot = cmake.parent_path();
+        if (projectRoot.empty()) projectRoot = start;
+    }
+
+    if (!camKey.empty()) {
+        fs::path ymlPath;
+        if (!camerasYml.empty()) {
+            ymlPath = fs::absolute(fs::path(camerasYml));
+        } else {
+            ymlPath = mfcam::findUpwardsForFile(fs::current_path(), "cameras.yml");
+        }
+        if (ymlPath.empty()) {
+            std::cerr << "ERROR: cameras.yml not found. Provide --cameras-yml <path>\n";
+            return 2;
+        }
+        if (!mfcam::loadSymbolicLinkFromCamerasYml(ymlPath, camKey, symbolicLink)) {
+            std::cerr << "ERROR: Could not find '" << camKey << "'->symbolic_link in " << ymlPath.string() << "\n";
+            return 2;
+        }
+        if (cameraId == "cam0") {
+            cameraId = camKey;
+        }
+        if (camerasYml.empty()) {
+            projectRoot = ymlPath.parent_path();
+        }
+    }
+
+    const fs::path outDir = projectRoot / "data" / cameraId;
     fs::create_directories(outDir);
 
     int nextIndex = 0;
@@ -81,10 +141,31 @@ int main(int argc, char** argv) {
         }
     }
 
-    cv::VideoCapture cap(cameraIndex);
-    if (!cap.isOpened()) {
-        std::cerr << "ERROR: Cannot open camera " << cameraIndex << "\n";
-        return 1;
+    cv::VideoCapture cap;
+    mfcam::Camera mf;
+    const bool useMf = !symbolicLink.empty();
+
+    if (useMf) {
+        mfcam::OpenOptions opts;
+        opts.width = reqWidth;
+        opts.height = reqHeight;
+        opts.fps = reqFps;
+
+        if (!mf.openSymbolicLink(symbolicLink, opts)) {
+            std::cerr << "ERROR: Cannot open camera by symbolic link\n";
+            if (!camKey.empty()) {
+                std::cerr << "  --cam: " << camKey << "\n";
+            }
+            std::cerr << "  symbolic_link: " << symbolicLink << "\n";
+            std::cerr << "Hint: If you pass --symbolic-link directly in cmd.exe, use double quotes (because '&' breaks arguments).\n";
+            return 1;
+        }
+    } else {
+        cap.open(cameraIndex);
+        if (!cap.isOpened()) {
+            std::cerr << "ERROR: Cannot open camera " << cameraIndex << "\n";
+            return 1;
+        }
     }
 
     std::cout << "Saving to: " << outDir.string() << "\\n";
@@ -101,7 +182,11 @@ int main(int argc, char** argv) {
 
     while (true) {
         cv::Mat frame;
-        cap >> frame;
+        if (useMf) {
+            if (!mf.readBgr(frame)) break;
+        } else {
+            cap >> frame;
+        }
         if (frame.empty()) break;
 
         cv::imshow(win, frame);
@@ -142,7 +227,9 @@ int main(int argc, char** argv) {
         }
     }
 
-    cap.release();
+    if (!useMf) {
+        cap.release();
+    }
     cv::destroyAllWindows();
     return 0;
 }

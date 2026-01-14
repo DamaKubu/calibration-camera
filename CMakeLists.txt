@@ -24,6 +24,7 @@ find_package(OpenCV REQUIRED)
 # =============================
 add_executable(capture
     capture/main.cpp
+    capture/mf_camera.cpp
 )
 
 add_executable(intrinsic
@@ -35,7 +36,7 @@ add_executable(extrinsic
 )
 
 # =============================
-# Optional: camera enumerator
+# Optional: camera enumerator by id
 # =============================
 option(BUILD_CAMERA_TRUE_ID "Build camera_true_id device enumerator" OFF)
 if (BUILD_CAMERA_TRUE_ID)
@@ -65,6 +66,13 @@ if (BUILD_STEREO_EXTRINSIC_FROM_PAIRS)
     )
 endif()
 
+option(BUILD_SINGLE_CAMERA_CAPTURE_AND_EXTRINSIC_BY_YML "Build single_camera_capture_and_extrinsic_by_yml (open cam by cameras.yml, capture + solvePnP)" OFF)
+if (BUILD_SINGLE_CAMERA_CAPTURE_AND_EXTRINSIC_BY_YML)
+    add_executable(single_camera_capture_and_extrinsic_by_yml
+        single_camera_capture_and_extrinsic_by_yml.cpp
+    )
+endif()
+
 # =============================
 # Link OpenCV
 # =============================
@@ -72,6 +80,10 @@ foreach(target capture intrinsic extrinsic)
     target_include_directories(${target} PRIVATE ${OpenCV_INCLUDE_DIRS})
     target_link_libraries(${target} PRIVATE ${OpenCV_LIBS})
 endforeach()
+
+if (WIN32)
+    target_link_libraries(capture PRIVATE mfplat mf mfreadwrite mfuuid ole32)
+endif()
 
 if (BUILD_DUAL_CAMERA_PREVIEW_BY_ID)
     target_include_directories(dual_camera_preview_by_id PRIVATE ${OpenCV_INCLUDE_DIRS})
@@ -86,4 +98,9 @@ endif()
 if (BUILD_STEREO_EXTRINSIC_FROM_PAIRS)
     target_include_directories(stereo_extrinsic_from_pairs PRIVATE ${OpenCV_INCLUDE_DIRS})
     target_link_libraries(stereo_extrinsic_from_pairs PRIVATE ${OpenCV_LIBS})
+endif()
+
+if (BUILD_SINGLE_CAMERA_CAPTURE_AND_EXTRINSIC_BY_YML)
+    target_include_directories(single_camera_capture_and_extrinsic_by_yml PRIVATE ${OpenCV_INCLUDE_DIRS})
+    target_link_libraries(single_camera_capture_and_extrinsic_by_yml PRIVATE ${OpenCV_LIBS})
 endif()

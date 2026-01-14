@@ -47,8 +47,10 @@ From the project root (the folder that contains CMakeLists.txt):
 
   cd C:\Users\IT Logika\Documents\CALIBRATION
 
-  cmake -S . -B build -G "Visual Studio 17 2022" -A x64
+  cmake -S . -B build -G "Visual Studio 17 2022"
   cmake --build build --config Release
+
+
 
 Outputs:
 - build\Release\capture.exe
@@ -146,6 +148,23 @@ which camera the calibration belongs to.
         -DBUILD_STEREO_CAPTURE_PAIRS_BY_ID=ON ^
         -DBUILD_STEREO_EXTRINSIC_FROM_PAIRS=ON
     cmake --build build --config Release
+
+=====================================================
+9) Single camera: capture + extrinsic (by cameras.yml)
+=====================================================
+
+Build the optional tool:
+  cmake -S . -B build -G "Visual Studio 17 2022" -DBUILD_SINGLE_CAMERA_CAPTURE_AND_EXTRINSIC_BY_YML=ON
+  cmake --build build --config Release
+
+Run (example for cam1):
+  build\Release\single_camera_capture_and_extrinsic_by_yml.exe --cameras-yml cameras.yml --cam cam1 \
+      --intrinsic data\calib_cam1\intrinsic.yml --output data\calib_cam1\extrinsic_live.yml \
+      --pattern 8x5 --square-mm 65 --save-dir data\calib_cam1 --count 30
+
+Controls:
+- Space saves one image
+- E solves extrinsic (solvePnP) on the current frame and writes the YAML
 
   (B) Capture paired images (by symbolic_link)
   -------------------------------------------
@@ -251,3 +270,8 @@ dual_camera_preview_by_id.exe  stereo_extrinsic_from_pairs.exe
 
 C:\Users\IT Logika\Documents\CALIBRATION\build\Release>.\stereo_extrinsic_from_pairs.exe --pairs-dir ..\..\data\pairs_cam1_cam2 --intr1 ..\..\data\calib_cam1\intrinsic.yml --intr2 ..\..\data\calib_cam2\intrinsic.yml --pattern 8x5 --square-mm 65 --output ..\..\data\pairs_cam1_cam2\stereo_extrinsic.yml
 ERROR: Not enough valid stereo detections: 0 (need >= 8)
+
+
+
+
+

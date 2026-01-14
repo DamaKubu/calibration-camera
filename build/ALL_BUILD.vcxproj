@@ -194,6 +194,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Project>{673FB7C8-362C-3D1C-AB76-B68DDFD73DF9}</Project>
       <Name>intrinsic</Name>
     </ProjectReference>
+    <ProjectReference Include="C:\Users\IT Logika\Documents\CALIBRATION\build\single_camera_capture_and_extrinsic_by_yml.vcxproj">
+      <Project>{76851BCA-91A0-3A0D-886B-099F73730963}</Project>
+      <Name>single_camera_capture_and_extrinsic_by_yml</Name>
+    </ProjectReference>
     <ProjectReference Include="C:\Users\IT Logika\Documents\CALIBRATION\build\stereo_capture_pairs_by_id.vcxproj">
       <Project>{4CB5FEC8-A952-3DAD-A589-A7C406BBB364}</Project>
       <Name>stereo_capture_pairs_by_id</Name>
