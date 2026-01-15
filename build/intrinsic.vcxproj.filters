@@ -4,6 +4,9 @@
     <ClCompile Include="C:\Users\IT Logika\Documents\CALIBRATION\intrinsic\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\IT Logika\Documents\CALIBRATION\intrinsic\intrinsic_app.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="C:\Users\IT Logika\Documents\CALIBRATION\CMakeLists.txt" />

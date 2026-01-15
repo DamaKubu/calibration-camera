@@ -198,13 +198,25 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Project>{673FB7C8-362C-3D1C-AB76-B68DDFD73DF9}</Project>
       <Name>intrinsic</Name>
     </ProjectReference>
+    <ProjectReference Include="C:\Users\IT Logika\Documents\CALIBRATION\build\live_motion.vcxproj">
+      <Project>{227631CB-0B33-3765-9ACA-B4475D64B3F6}</Project>
+      <Name>live_motion</Name>
+    </ProjectReference>
     <ProjectReference Include="C:\Users\IT Logika\Documents\CALIBRATION\build\mf_camera.vcxproj">
       <Project>{E19E1BD3-3825-3E7A-B2AB-AFBBA0F9B560}</Project>
       <Name>mf_camera</Name>
     </ProjectReference>
+    <ProjectReference Include="C:\Users\IT Logika\Documents\CALIBRATION\build\single_red_tracking.vcxproj">
+      <Project>{4551CE54-96E2-3649-B33B-DB5FDF343EAD}</Project>
+      <Name>single_red_tracking</Name>
+    </ProjectReference>
     <ProjectReference Include="C:\Users\IT Logika\Documents\CALIBRATION\build\stereo_extrinsic_from_pairs.vcxproj">
       <Project>{84909889-493F-3210-9FD3-64091687A467}</Project>
       <Name>stereo_extrinsic_from_pairs</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\IT Logika\Documents\CALIBRATION\build\stereo_gpu_min.vcxproj">
+      <Project>{74999070-456E-3849-97BA-D598929D5C2A}</Project>
+      <Name>stereo_gpu_min</Name>
     </ProjectReference>
     <ProjectReference Include="C:\Users\IT Logika\Documents\CALIBRATION\build\_deps\yaml-cpp-build\yaml-cpp.vcxproj">
       <Project>{DBDF556F-61A2-3E84-B071-A29E5443837B}</Project>

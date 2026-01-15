@@ -237,80 +237,72 @@ Controls:
 
 
 
+Simplified live_motion (chessboard-only)
+----------------------------------------
 
-C:\Users\IT Logika\Documents\CALIBRATION\build\Release>.\stereo_capture_pairs_by_id.exe --cam1 '\\?\usb#vid_1bcf&pid_2286&mi_00#7&12826ac5&0&0000#{e5323777-f976-4f5b-9b55-b94699c46e44}\global' --cam2 '\\?\usb#vid_1bcf&pid_2286&mi_00#6&27cb31a1&0&0000#{e5323777-f976-4f5b-9b55-b94699c46e44}\global' --out-dir ..\..\data\pairs_cam1_cam2 --count 30
-ERROR: --cam1 and --cam2 are required
-stereo_capture_pairs_by_id
+flowchart TD
+  A[Start live_motion.exe] --> B[Load intrinsics for cam1/cam2]
+  B --> C[Load stereo extrinsics R,T]
+  C --> D[Open cam1 & cam2 streams]
+  D --> E[Detect chessboard corners (9x6)]
+  E --> F[Get 2D center in cam1 + cam2]
+  F --> G[Undistort to normalized rays]
+  G --> H[Triangulate with R,T]
+  H --> I[Show XYZ + save CSV]
 
-Usage:
-  stereo_capture_pairs_by_id.exe --cam1 <symbolic_link> --cam2 <symbolic_link> --out-dir data/pairs_cam1_cam2 [--count 30]
+Example:
+  build\Release\live_motion.exe --cam1 cam1 --cam2 cam2 --board --pattern 9x6 --square-mm 23.6 \
+      --extrinsics reports\stereo_live.yml --baseline-mm 980 --max-fps 15
 
-Controls:
-  Space : save one synchronized pair
-  Esc   : quit
-'pid_2286' is not recognized as an internal or external command,
-operable program or batch file.
-'mi_00#7' is not recognized as an internal or external command,
-operable program or batch file.
-'12826ac5' is not recognized as an internal or external command,
-operable program or batch file.
-'0' is not recognized as an internal or external command,
-operable program or batch file.
-The system cannot find the path specified.
-'pid_2286' is not recognized as an internal or external command,
-operable program or batch file.
-'mi_00#6' is not recognized as an internal or external command,
-operable program or batch file.
-'27cb31a1' is not recognized as an internal or external command,
-operable program or batch file.
-'0' is not recognized as an internal or external command,
-operable program or batch file.
-The system cannot find the path specified.
 
-C:\Users\IT Logika\Documents\CALIBRATION\build\Release>.\stereo_capture_pairs_by_id.exe --cam1 "\\?\usb#vid_1bcf&pid_2286&mi_00#7&12826ac5&0&0000#{e5323777-f976-4f5b-9b55-b94699c46e44}\global" --cam2 "\\?\usb#vid_1bcf&pid_2286&mi_00#6&27cb31a1&0&0000#{e5323777-f976-4f5b-9b55-b94699c46e44}\global" --out-dir ..\..\data\pairs_cam1_cam2 --count 30
-Saving pairs to: C:\Users\IT Logika\Documents\CALIBRATION\data\pairs_cam1_cam2
-Press Space to save pair, Esc to quit.
-Saved pair 1/30 (cam1_0000.png, cam2_0000.png)
-Saved pair 2/30 (cam1_0001.png, cam2_0001.png)
-Saved pair 3/30 (cam1_0002.png, cam2_0002.png)
-Saved pair 4/30 (cam1_0003.png, cam2_0003.png)
-Saved pair 5/30 (cam1_0004.png, cam2_0004.png)
-Saved pair 6/30 (cam1_0005.png, cam2_0005.png)
-Saved pair 7/30 (cam1_0006.png, cam2_0006.png)
-Saved pair 8/30 (cam1_0007.png, cam2_0007.png)
-Saved pair 9/30 (cam1_0008.png, cam2_0008.png)
-Saved pair 10/30 (cam1_0009.png, cam2_0009.png)
-Saved pair 11/30 (cam1_0010.png, cam2_0010.png)
-Saved pair 12/30 (cam1_0011.png, cam2_0011.png)
-Saved pair 13/30 (cam1_0012.png, cam2_0012.png)
-Saved pair 14/30 (cam1_0013.png, cam2_0013.png)
-Saved pair 15/30 (cam1_0014.png, cam2_0014.png)
-Saved pair 16/30 (cam1_0015.png, cam2_0015.png)
-Saved pair 17/30 (cam1_0016.png, cam2_0016.png)
-Saved pair 18/30 (cam1_0017.png, cam2_0017.png)
-Saved pair 19/30 (cam1_0018.png, cam2_0018.png)
-Saved pair 20/30 (cam1_0019.png, cam2_0019.png)
-Saved pair 21/30 (cam1_0020.png, cam2_0020.png)
-Saved pair 22/30 (cam1_0021.png, cam2_0021.png)
-Saved pair 23/30 (cam1_0022.png, cam2_0022.png)
-Saved pair 24/30 (cam1_0023.png, cam2_0023.png)
-Saved pair 25/30 (cam1_0024.png, cam2_0024.png)
-Saved pair 26/30 (cam1_0025.png, cam2_0025.png)
-Saved pair 27/30 (cam1_0026.png, cam2_0026.png)
-Saved pair 28/30 (cam1_0027.png, cam2_0027.png)
-Saved pair 29/30 (cam1_0028.png, cam2_0028.png)
-Saved pair 30/30 (cam1_0029.png, cam2_0029.png)
+3-camera calibration workflow (intrinsics + extrinsics)
+------------------------------------------------------
 
-C:\Users\IT Logika\Documents\CALIBRATION\build\Release>ls
-camera_true_id.exe             extrinsic.exe
-capture.exe                    intrinsic.exe
-data                           stereo_capture_pairs_by_id.exe
-dual_camera_preview_by_id.exe  stereo_extrinsic_from_pairs.exe
+flowchart TD
+  A[Capture intrinsics per camera] --> B[Run intrinsic.exe per camera]
+  B --> C[Capture multi-camera session]
+  C --> D[Run extrinsic.exe on session]
+  D --> E[Use extrinsics with live_motion]
 
-C:\Users\IT Logika\Documents\CALIBRATION\build\Release>.\stereo_extrinsic_from_pairs.exe --pairs-dir ..\..\data\pairs_cam1_cam2 --intr1 ..\..\data\calib_cam1\intrinsic.yml --intr2 ..\..\data\calib_cam2\intrinsic.yml --pattern 8x5 --square-mm 65 --output ..\..\data\pairs_cam1_cam2\stereo_extrinsic.yml
-ERROR: Not enough valid stereo detections: 0 (need >= 8)
+Step-by-step (3 cams: cam1, cam2, cam3)
+---------------------------------------
+
+1) Capture intrinsics for each camera:
+  build\Release\capture.exe --camera 0 --camera-id calib_cam1 --count 60
+  build\Release\capture.exe --camera 1 --camera-id calib_cam2 --count 60
+  build\Release\capture.exe --camera 2 --camera-id calib_cam3 --count 60
+
+2) Solve intrinsics for each camera:
+  build\Release\intrinsic.exe --camera-id calib_cam1 --pattern 9x6 --square-mm 23.6
+  build\Release\intrinsic.exe --camera-id calib_cam2 --pattern 9x6 --square-mm 23.6
+  build\Release\intrinsic.exe --camera-id calib_cam3 --pattern 9x6 --square-mm 23.6
+
+3) Capture synchronized multi-camera session:
+  build\Release\capture_multiple.exe --cams cam1,cam2,cam3 --count 60 --auto --pattern 9x6
+
+4) Solve extrinsics for the session:
+  build\Release\extrinsic.exe --session data\extrinsic_multi\session_0 --ref cam1
+
+Notes:
+- Make sure capture resolution matches the intrinsics calibration resolution.
+- Use large board coverage and varied tilts for stable extrinsics.
+
+
+live_motion program flow (easy to modify)
+----------------------------------------
+
+flowchart TD
+  A[Parse CLI + AppConfig] --> B[Load intrinsics]
+  B --> C[Load or quick-calibrate stereo extrinsics]
+  C --> D[Open cameras]
+  D --> E[Main loop]
+  E --> F{Tracking mode}
+  F -->|board| G[Detect chessboard]
+  G --> K[2D points]
+  K --> L[Undistort + triangulate]
+  L --> M[Display + CSV]
+  M --> E
 
 
 
-
-
+  

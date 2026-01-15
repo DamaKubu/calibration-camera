@@ -1,0 +1,40 @@
+%YAML:1.0
+---
+session: "C:\\Users\\IT Logika\\Documents\\CALIBRATION\\data\\extrinsic_multi\\session_0"
+ref_cam: cam1
+method: pnp
+max_pnp_reproj_px: 2.
+dist_n: 8
+pattern_cols: 8
+pattern_rows: 5
+square_mm: 65.
+intrinsics_root: "C:\\Users\\IT Logika\\Documents\\CALIBRATION\\data"
+intrinsics_prefix: calib_
+cameras:
+   - cam1
+   - cam2
+   - cam3
+pairs:
+   -
+      cam1: cam1
+      cam2: cam2
+      pair_method: pnp
+      views: 60
+      trans_std_mm: 160.96442072142307
+      rot_std_deg: 17.20792494077056
+      R: !!opencv-matrix
+         rows: 3
+         cols: 3
+         dt: d
+         data: [ -0.2918142277417079, 0.94732466383388558,
+             -0.13198650605090717, -0.94637000107435487,
+             -0.26596339539064812, 0.18343198570261127,
+             0.13866606489706074, 0.17843613312413292,
+             0.97413154596372187 ]
+      T: !!opencv-matrix
+         rows: 3
+         cols: 1
+         dt: d
+         data: [ -587.27366239135347, -153.19128965338433,
+             54.40438152508753 ]
+      baseline_mm: 609.35848438611879

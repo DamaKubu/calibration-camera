@@ -62,9 +62,24 @@ endif()
 # =============================
 add_executable(capture capture/main.cpp)
 add_executable(capture_multiple capture/capture_multiple/main.cpp)
-add_executable(capture_intrinsic capture/capture_intrinsic/main.cpp)
-add_executable(intrinsic intrinsic/main.cpp)
-add_executable(extrinsic extrinsic/main.cpp)
+add_executable(capture_intrinsic
+    capture/capture_intrinsic/main.cpp
+    capture/capture_intrinsic/capture_intrinsic_app.cpp
+)
+add_executable(intrinsic
+    intrinsic/main.cpp
+    intrinsic/intrinsic_app.cpp
+)
+add_executable(extrinsic
+    extrinsic/main.cpp
+    extrinsic/extrinsic_app.cpp
+)
+add_executable(live_motion
+    live_motion/main.cpp
+    live_motion/live_motion_app.cpp
+)
+add_executable(stereo_gpu_min tools/stereo_gpu_min.cpp)
+add_executable(single_red_tracking tools/single_red_tracking.cpp)
 add_executable(camera_true_id camera_true_id.cpp)
 add_executable(stereo_extrinsic_from_pairs stereo_extrinsic_from_pairs.cpp)
 
@@ -72,7 +87,7 @@ add_executable(stereo_extrinsic_from_pairs stereo_extrinsic_from_pairs.cpp)
 # =============================
 # Link
 # =============================
-foreach(target capture capture_multiple capture_intrinsic intrinsic extrinsic camera_true_id)
+foreach(target capture capture_multiple capture_intrinsic intrinsic extrinsic live_motion stereo_gpu_min single_red_tracking camera_true_id)
     target_include_directories(${target} PRIVATE ${OpenCV_INCLUDE_DIRS})
     target_link_libraries(${target} PRIVATE ${OpenCV_LIBS})
 endforeach()
@@ -80,6 +95,7 @@ endforeach()
 target_link_libraries(capture PRIVATE mf_camera)
 target_link_libraries(capture_multiple PRIVATE mf_camera)
 target_link_libraries(capture_intrinsic PRIVATE mf_camera)
+target_link_libraries(live_motion PRIVATE mf_camera)
 
 if (WIN32)
     target_link_libraries(camera_true_id PRIVATE mfplat mf mfuuid ole32)

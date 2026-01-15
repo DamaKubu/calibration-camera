@@ -50,7 +50,7 @@ int main() {
     hr = MFStartup(MF_VERSION);
     if (FAILED(hr)) {
         printHresult("MFStartup", hr);
-        CoUninitialize();
+        CoUninitialize(u vis);
         return 1;
     }
 
