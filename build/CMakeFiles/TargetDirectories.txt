@@ -5,8 +5,11 @@ C:/Users/IT Logika/Documents/CALIBRATION/build/CMakeFiles/capture_intrinsic.dir
 C:/Users/IT Logika/Documents/CALIBRATION/build/CMakeFiles/intrinsic.dir
 C:/Users/IT Logika/Documents/CALIBRATION/build/CMakeFiles/extrinsic.dir
 C:/Users/IT Logika/Documents/CALIBRATION/build/CMakeFiles/live_motion.dir
+<<<<<<< Updated upstream
 C:/Users/IT Logika/Documents/CALIBRATION/build/CMakeFiles/stereo_gpu_min.dir
 C:/Users/IT Logika/Documents/CALIBRATION/build/CMakeFiles/single_red_tracking.dir
+=======
+>>>>>>> Stashed changes
 C:/Users/IT Logika/Documents/CALIBRATION/build/CMakeFiles/camera_true_id.dir
 C:/Users/IT Logika/Documents/CALIBRATION/build/CMakeFiles/stereo_extrinsic_from_pairs.dir
 C:/Users/IT Logika/Documents/CALIBRATION/build/CMakeFiles/ALL_BUILD.dir

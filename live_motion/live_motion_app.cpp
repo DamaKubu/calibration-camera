@@ -5,8 +5,27 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 
+<<<<<<< Updated upstream
 #include <chrono>
 #include <algorithm>
+=======
+#include <opencv2/core/cuda.hpp>
+#if __has_include(<opencv2/cudaimgproc.hpp>)
+#include <opencv2/cudaimgproc.hpp>
+#define LIVE_MOTION_HAS_CUDAIMGPROC 1
+#else
+#define LIVE_MOTION_HAS_CUDAIMGPROC 0
+#endif
+
+#if __has_include(<opencv2/cudaarithm.hpp>)
+#include <opencv2/cudaarithm.hpp>
+#define LIVE_MOTION_HAS_CUDAARITHM 1
+#else
+#define LIVE_MOTION_HAS_CUDAARITHM 0
+#endif
+
+#include <chrono>
+>>>>>>> Stashed changes
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -68,6 +87,53 @@ static std::string nowIso8601() {
     return ss.str();
 }
 
+<<<<<<< Updated upstream
+=======
+static void parseHsvRange(const std::string& s, HsvRange& r) {
+    // hmin,smin,vmin,hmax,smax,vmax
+    int vals[6] = {0, 0, 0, 179, 255, 255};
+    int idx = 0;
+    std::string cur;
+    for (char c : s) {
+        if (c == ',') {
+            if (idx >= 6) break;
+            vals[idx++] = std::stoi(cur);
+            cur.clear();
+        } else {
+            cur.push_back(c);
+        }
+    }
+    if (!cur.empty() && idx < 6) vals[idx++] = std::stoi(cur);
+    if (idx != 6) throw std::runtime_error("Bad --hsv; expected hmin,smin,vmin,hmax,smax,vmax");
+    r.hMin = vals[0];
+    r.sMin = vals[1];
+    r.vMin = vals[2];
+    r.hMax = vals[3];
+    r.sMax = vals[4];
+    r.vMax = vals[5];
+}
+
+static cv::Mat makeMaskCpu(const cv::Mat& bgr, const HsvRange& hsv, int morphRadius) {
+    cv::Mat hsvImg;
+    cv::cvtColor(bgr, hsvImg, cv::COLOR_BGR2HSV);
+
+    cv::Mat mask;
+    cv::inRange(hsvImg,
+                cv::Scalar(hsv.hMin, hsv.sMin, hsv.vMin),
+                cv::Scalar(hsv.hMax, hsv.sMax, hsv.vMax),
+                mask);
+
+    if (morphRadius > 0) {
+        const int k = 2 * morphRadius + 1;
+        cv::Mat kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(k, k));
+        cv::morphologyEx(mask, mask, cv::MORPH_OPEN, kernel);
+        cv::morphologyEx(mask, mask, cv::MORPH_CLOSE, kernel);
+    }
+
+    return mask;
+}
+
+>>>>>>> Stashed changes
 static bool loadIntrinsics(const fs::path& path, cv::Mat& K, cv::Mat& D, cv::Size& imageSize, std::string& model) {
     cv::FileStorage fs(path.string(), cv::FileStorage::READ);
     if (!fs.isOpened()) return false;
@@ -136,7 +202,11 @@ static bool detectChessboardCornersRobust(const cv::Mat& gray,
 #endif
 
     {
+<<<<<<< Updated upstream
         const int flagsClassic = cv::CALIB_CB_ADAPTIVE_THRESH | cv::CALIB_CB_NORMALIZE_IMAGE | cv::CALIB_CB_FAST_CHECK;
+=======
+        const int flagsClassic = cv::CALIB_CB_ADAPTIVE_THRESH | cv::CALIB_CB_NORMALIZE_IMAGE;
+>>>>>>> Stashed changes
         if (cv::findChessboardCorners(gray, pattern, corners, flagsClassic)) return true;
 
         cv::Mat eq;
@@ -225,9 +295,81 @@ static void saveStereoExtrinsicsYml(const fs::path& outPath,
 struct BallObs {
     bool found = false;
     cv::Point2f centerPx{};
+<<<<<<< Updated upstream
     double areaPx = 0.0;
 };
 
+=======
+    float radiusPx = 0.0f;
+    double areaPx = 0.0;
+};
+
+static BallObs detectBallCpu(const cv::Mat& bgr, const HsvRange& hsv, int morphRadius, double minAreaPx) {
+    BallObs out;
+    if (bgr.empty()) return out;
+
+    cv::Mat mask = makeMaskCpu(bgr, hsv, morphRadius);
+
+    std::vector<std::vector<cv::Point>> contours;
+    cv::findContours(mask, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+
+    double bestArea = 0.0;
+    int bestIdx = -1;
+    for (int i = 0; i < (int)contours.size(); ++i) {
+        const double a = cv::contourArea(contours[(size_t)i]);
+        if (a > bestArea) {
+            bestArea = a;
+            bestIdx = i;
+        }
+    }
+
+    if (bestIdx < 0 || bestArea < minAreaPx) return out;
+
+    cv::Point2f c;
+    float r = 0.0f;
+    cv::minEnclosingCircle(contours[(size_t)bestIdx], c, r);
+
+    out.found = true;
+    out.centerPx = c;
+    out.radiusPx = r;
+    out.areaPx = bestArea;
+    return out;
+}
+
+static BallObs detectBallCuda(const cv::Mat& bgr, const HsvRange& hsv, int morphRadius, double minAreaPx) {
+    (void)hsv;
+    (void)morphRadius;
+    (void)minAreaPx;
+
+    BallObs out;
+
+#if LIVE_MOTION_HAS_CUDAIMGPROC && LIVE_MOTION_HAS_CUDAARITHM
+    if (bgr.empty()) return out;
+    if (cv::cuda::getCudaEnabledDeviceCount() <= 0) return out;
+
+    try {
+        cv::cuda::GpuMat d_bgr, d_hsv, d_mask;
+        d_bgr.upload(bgr);
+        cv::cuda::cvtColor(d_bgr, d_hsv, cv::COLOR_BGR2HSV);
+
+        cv::Scalar lo(hsv.hMin, hsv.sMin, hsv.vMin);
+        cv::Scalar hi(hsv.hMax, hsv.sMax, hsv.vMax);
+        cv::cuda::inRange(d_hsv, lo, hi, d_mask);
+
+        // morphology on GPU would need cuda::createMorphologyFilter (available in some builds).
+        // To keep this tool robust across OpenCV builds, we download the mask and continue on CPU.
+        cv::Mat mask;
+        d_mask.download(mask);
+        return detectBallCpu(bgr, hsv, morphRadius, minAreaPx);
+    } catch (...) {
+        return out;
+    }
+#else
+    return out;
+#endif
+}
+
+>>>>>>> Stashed changes
 static void undistortPointNormalized(const cv::Point2f& p,
                                     const cv::Mat& K,
                                     const cv::Mat& D,
@@ -284,8 +426,13 @@ static bool triangulateOne(const cv::Point2f& p1Norm,
 }
 
 void printUsage(std::ostream& os) {
+<<<<<<< Updated upstream
     os << "live_motion (stereo chessboard tracking)\n\n"
        << "Uses cam1+cam2 to track a chessboard center and triangulate 3D position.\n\n"
+=======
+    os << "live_motion (stereo ball tracking)\n\n"
+       << "Uses cam1+cam2 to track a colored ball and triangulate 3D position.\n\n"
+>>>>>>> Stashed changes
        << "Usage:\n"
        << "  live_motion.exe --cam1 cam1 --cam2 cam2 --extrinsics data/pairs_cam1_cam2/stereo_extrinsic.yml\n"
        << "\nOptions:\n"
@@ -297,6 +444,7 @@ void printUsage(std::ostream& os) {
     << "  --extrinsics <file.yml>       Stereo extrinsics file (default data/pairs_cam1_cam2/stereo_extrinsic.yml)\n"
     << "  --quick-calib                 Quick stereo calibration first (then track)\n"
     << "  --calib-frames <n>            Number of good chessboard pairs to collect (default 25)\n"
+<<<<<<< Updated upstream
     << "  --pattern <WxH>               Chessboard inner corners (default 9x6)\n"
     << "  --square-mm <float>           Chessboard square size in mm (default 23.6)\n"
      << "  --save-extrinsics <file.yml>  Save computed stereo extrinsics\n"
@@ -307,6 +455,18 @@ void printUsage(std::ostream& os) {
      << "  --det-scale <f>               Downscale factor for detection (e.g. 0.5)\n"
        << "  --csv <file.csv>              Write CSV: time,x,y,z,u1,v1,u2,v2\n"
        << "  --no-show                     Disable preview windows\n"
+=======
+    << "  --pattern <WxH>               Chessboard inner corners (default 8x5)\n"
+    << "  --square-mm <float>           Chessboard square size in mm (default 65)\n"
+    << "  --save-extrinsics <file.yml>  Save computed stereo extrinsics\n"
+       << "  --hsv hmin,smin,vmin,hmax,smax,vmax   HSV threshold for ball\n"
+       << "  --min-area <px2>              Minimum blob area (default 150)\n"
+       << "  --morph <radius>              Morph radius (default 3)\n"
+    << "  --tune                        Show HSV trackbars + mask previews\n"
+       << "  --csv <file.csv>              Write CSV: time,x,y,z,u1,v1,u2,v2\n"
+       << "  --no-show                     Disable preview windows\n"
+       << "  --no-cuda                     Disable CUDA preprocessing\n"
+>>>>>>> Stashed changes
        << "  --max-fps <n>                 Limit processing rate\n"
        << "  --req-width <n>               Request capture width\n"
        << "  --req-height <n>              Request capture height\n"
@@ -319,6 +479,17 @@ bool parseArgs(int argc, char** argv, AppConfig& cfg) {
         return argv[++i];
     };
 
+<<<<<<< Updated upstream
+=======
+    // Outdoor yellow tennis ball: reasonable starting guess.
+    cfg.hsv.hMin = 18;
+    cfg.hsv.sMin = 80;
+    cfg.hsv.vMin = 80;
+    cfg.hsv.hMax = 40;
+    cfg.hsv.sMax = 255;
+    cfg.hsv.vMax = 255;
+
+>>>>>>> Stashed changes
     for (int i = 1; i < argc; ++i) {
         const std::string a = argv[i];
         if (a == "--help" || a == "-h") {
@@ -350,6 +521,7 @@ bool parseArgs(int argc, char** argv, AppConfig& cfg) {
             cfg.squareMm = std::stod(need(i, "--square-mm"));
         } else if (a == "--save-extrinsics") {
             cfg.saveStereoExtrinsics = need(i, "--save-extrinsics");
+<<<<<<< Updated upstream
         } else if (a == "--baseline-mm") {
             cfg.baselineMm = std::stod(need(i, "--baseline-mm"));
         } else if (a == "--force-stereo") {
@@ -361,10 +533,25 @@ bool parseArgs(int argc, char** argv, AppConfig& cfg) {
         } else if (a == "--det-scale") {
             cfg.detScale = std::stod(need(i, "--det-scale"));
             if (cfg.detScale <= 0.0 || cfg.detScale > 1.0) throw std::runtime_error("--det-scale must be in (0,1]");
+=======
+        } else if (a == "--hsv") {
+            parseHsvRange(need(i, "--hsv"), cfg.hsv);
+        } else if (a == "--min-area") {
+            cfg.minAreaPx = std::stod(need(i, "--min-area"));
+        } else if (a == "--morph") {
+            cfg.morph = std::stoi(need(i, "--morph"));
+        } else if (a == "--tune") {
+            cfg.tune = true;
+>>>>>>> Stashed changes
         } else if (a == "--csv") {
             cfg.outputCsv = need(i, "--csv");
         } else if (a == "--no-show") {
             cfg.show = false;
+<<<<<<< Updated upstream
+=======
+        } else if (a == "--no-cuda") {
+            cfg.useCuda = false;
+>>>>>>> Stashed changes
         } else if (a == "--max-fps") {
             cfg.maxFps = std::stoi(need(i, "--max-fps"));
         } else if (a == "--req-width") {
@@ -412,6 +599,7 @@ int run(const AppConfig& cfg) {
     bool fisheyeStereo = false;
     bool haveStereo = false;
     if (!cfg.quickCalibrateStereo) {
+<<<<<<< Updated upstream
         if (cfg.forceStereo) {
             if (cfg.baselineMm <= 0.0) {
                 throw std::runtime_error("--force-stereo requires --baseline-mm > 0");
@@ -437,6 +625,12 @@ int run(const AppConfig& cfg) {
             }
             haveStereo = true;
         }
+=======
+        if (!loadStereoExtrinsics(ext, R, T, fisheyeStereo)) {
+            throw std::runtime_error("Failed to load stereo extrinsics: " + ext.string());
+        }
+        haveStereo = true;
+>>>>>>> Stashed changes
     }
 
     const bool fisheye = fisheyeStereo || (model1 == "fisheye") || (model2 == "fisheye");
@@ -479,6 +673,7 @@ int run(const AppConfig& cfg) {
 
         std::vector<cv::Point2f> prev1, prev2;
         int stableCount = 0;
+<<<<<<< Updated upstream
         // Loosen gating criteria
         const double maxMotionPx = 1.5;      // allow slightly more motion
         const double minAreaRatio = 0.02;    // allow very small boards in frame
@@ -487,6 +682,10 @@ int run(const AppConfig& cfg) {
         // Frame rate limiter setup
         auto lastFrame = std::chrono::high_resolution_clock::now();
         const double minFrameTime = (cfg.maxFps > 0) ? (1.0 / cfg.maxFps) : 0.0;
+=======
+        const double maxMotionPx = 0.40;
+        const double minAreaRatio = 0.10;
+>>>>>>> Stashed changes
 
         cout << "\n=== QUICK STEREO CALIBRATION ===\n";
         cout << "Collecting " << cfg.calibFrames << " good chessboard pairs...\n";
@@ -498,14 +697,18 @@ int run(const AppConfig& cfg) {
         }
 
         while ((int)objectPoints.size() < cfg.calibFrames) {
+<<<<<<< Updated upstream
 
             auto frameStart = std::chrono::high_resolution_clock::now();
+=======
+>>>>>>> Stashed changes
             cv::Mat a, b;
             if (!cam1.readBgr(a) || !cam2.readBgr(b)) {
                 std::this_thread::sleep_for(std::chrono::milliseconds(1));
                 continue;
             }
 
+<<<<<<< Updated upstream
             // Only declare variables once per loop iteration
             BoardDet d1 = detectBoard(a, pattern, prev1.empty() ? nullptr : &prev1);
             BoardDet d2 = detectBoard(b, pattern, prev2.empty() ? nullptr : &prev2);
@@ -527,6 +730,14 @@ int run(const AppConfig& cfg) {
             }
             if (ok) {
                 ok = ok && areaOk1 && areaOk2;
+=======
+            BoardDet d1 = detectBoard(a, pattern, prev1.empty() ? nullptr : &prev1);
+            BoardDet d2 = detectBoard(b, pattern, prev2.empty() ? nullptr : &prev2);
+
+            bool ok = d1.found && d2.found;
+            if (ok) {
+                ok = ok && (d1.areaRatio >= minAreaRatio) && (d2.areaRatio >= minAreaRatio);
+>>>>>>> Stashed changes
                 ok = ok && (d1.meanMotionPx <= maxMotionPx) && (d2.meanMotionPx <= maxMotionPx);
             }
 
@@ -535,6 +746,7 @@ int run(const AppConfig& cfg) {
 
             if (ok) stableCount++; else stableCount = 0;
 
+<<<<<<< Updated upstream
             if (!ok) {
                 // Print diagnostics for rejected frames
                 std::cout << "[REJECT] " << rejectReason << " area=" << d1.areaRatio << "/" << d2.areaRatio << " motion=" << d1.meanMotionPx << "/" << d2.meanMotionPx << "\n";
@@ -543,6 +755,8 @@ int run(const AppConfig& cfg) {
                 std::cout << "[ACCEPT-SMALL] full corners detected; accepting despite small area (" << d1.areaRatio << "/" << d2.areaRatio << ")\n";
             }
 
+=======
+>>>>>>> Stashed changes
             if (cfg.show) {
                 cv::Mat va = a.clone();
                 cv::Mat vb = b.clone();
@@ -563,12 +777,17 @@ int run(const AppConfig& cfg) {
             }
 
             // Require a few stable frames before accepting.
+<<<<<<< Updated upstream
             if (stableCount >= requiredStable && d1.found && d2.found) {
+=======
+            if (stableCount >= 6 && d1.found && d2.found) {
+>>>>>>> Stashed changes
                 objectPoints.push_back(obj);
                 img1.push_back(d1.corners);
                 img2.push_back(d2.corners);
                 stableCount = 0;
                 cout << "Captured pair " << objectPoints.size() << "/" << cfg.calibFrames << "\n";
+<<<<<<< Updated upstream
             }
 
             // Frame rate limiting
@@ -596,11 +815,44 @@ int run(const AppConfig& cfg) {
             rms = cv::stereoCalibrate(objectPoints, img1, img2, K1, D1, K2, D2,
                                       imageSize, R, T, E, F, flags,
                                       cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 200, 1e-7));
+=======
+                std::this_thread::sleep_for(std::chrono::milliseconds(150));
+            }
+        }
+
+        if (cfg.show) {
+            cv::destroyWindow("calib_cam1");
+            cv::destroyWindow("calib_cam2");
+        }
+
+        cv::Size imageSize;
+        if (!size1.empty()) imageSize = size1;
+        else if (!size2.empty()) imageSize = size2;
+
+        cv::Mat E, F;
+        double rms = 0.0;
+        try {
+            if (fisheye) {
+                // Fisheye stereo calibration
+                const int flags = cv::fisheye::CALIB_FIX_INTRINSIC;
+                rms = cv::fisheye::stereoCalibrate(objectPoints, img1, img2, K1, D1, K2, D2,
+                                                  imageSize, R, T, flags,
+                                                  cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 200, 1e-7));
+            } else {
+                int flags = cv::CALIB_FIX_INTRINSIC;
+                flags |= flagsForDistortion(D1);
+                flags |= flagsForDistortion(D2);
+                rms = cv::stereoCalibrate(objectPoints, img1, img2, K1, D1, K2, D2,
+                                          imageSize, R, T, E, F, flags,
+                                          cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 200, 1e-7));
+            }
+>>>>>>> Stashed changes
         } catch (const cv::Exception& e) {
             throw std::runtime_error(std::string("Stereo calibration failed: ") + e.what());
         }
 
         cout << "Quick stereo calib RMS: " << rms << " px\n";
+<<<<<<< Updated upstream
         if (cfg.baselineMm > 0.0) {
             const double tnorm = cv::norm(T);
             if (tnorm > 1e-9) {
@@ -611,24 +863,38 @@ int run(const AppConfig& cfg) {
                 cout << "Baseline constraint requested, but |T| ~ 0; skipped.\n";
             }
         }
+=======
+>>>>>>> Stashed changes
         haveStereo = true;
         fisheyeStereo = fisheye;
 
         if (!cfg.saveStereoExtrinsics.empty()) {
+<<<<<<< Updated upstream
             fs::path out = cfg.saveStereoExtrinsics;
             if (out.is_relative()) out = root / out;
             if (out.parent_path().empty()) out = root / "reports" / out;
             if (!out.parent_path().empty()) fs::create_directories(out.parent_path());
+=======
+            fs::path out = resolvePathSmart(root, cfg.saveStereoExtrinsics);
+>>>>>>> Stashed changes
             saveStereoExtrinsicsYml(out, fs::path("(live)"), intr1, intr2, pattern, cfg.squareMm, (int)objectPoints.size(), fisheye, rms, R, T, E, F);
             cout << "Saved stereo extrinsics: " << out.string() << "\n";
         }
         cout << "=== TRACKING ===\n";
     }
 
+<<<<<<< Updated upstream
+=======
+    if (!haveStereo) {
+        throw std::runtime_error("No stereo extrinsics available");
+    }
+
+>>>>>>> Stashed changes
     std::ofstream csv;
     if (!cfg.outputCsv.empty()) {
         fs::path out = cfg.outputCsv;
         if (out.is_relative()) out = root / out;
+<<<<<<< Updated upstream
         if (out.parent_path().empty()) out = root / "reports" / out;
         if (!out.parent_path().empty()) fs::create_directories(out.parent_path());
         csv.open(out);
@@ -640,10 +906,47 @@ int run(const AppConfig& cfg) {
     if (cfg.show) {
         cv::namedWindow("cam1", cv::WINDOW_NORMAL);
         cv::namedWindow("cam2", cv::WINDOW_NORMAL);
+=======
+        if (!out.parent_path().empty()) fs::create_directories(out.parent_path());
+        csv.open(out);
+        if (!csv.is_open()) throw std::runtime_error("Failed to open CSV: " + out.string());
+        csv << "time,x_mm,y_mm,z_mm,u1,v1,u2,v2,r1,r2,a1,a2\n";
+        cout << "Writing CSV: " << fs::absolute(out).string() << "\n";
+    }
+
+    int hMin = cfg.hsv.hMin;
+    int sMin = cfg.hsv.sMin;
+    int vMin = cfg.hsv.vMin;
+    int hMax = cfg.hsv.hMax;
+    int sMax = cfg.hsv.sMax;
+    int vMax = cfg.hsv.vMax;
+    int morphR = cfg.morph;
+    int minArea = (int)cfg.minAreaPx;
+
+    if (cfg.show) {
+        cv::namedWindow("cam1", cv::WINDOW_NORMAL);
+        cv::namedWindow("cam2", cv::WINDOW_NORMAL);
+
+        if (cfg.tune) {
+            cv::namedWindow("tune", cv::WINDOW_NORMAL);
+            cv::namedWindow("mask1", cv::WINDOW_NORMAL);
+            cv::namedWindow("mask2", cv::WINDOW_NORMAL);
+
+            cv::createTrackbar("hMin", "tune", &hMin, 179);
+            cv::createTrackbar("sMin", "tune", &sMin, 255);
+            cv::createTrackbar("vMin", "tune", &vMin, 255);
+            cv::createTrackbar("hMax", "tune", &hMax, 179);
+            cv::createTrackbar("sMax", "tune", &sMax, 255);
+            cv::createTrackbar("vMax", "tune", &vMax, 255);
+            cv::createTrackbar("morph", "tune", &morphR, 20);
+            cv::createTrackbar("minArea", "tune", &minArea, 20000);
+        }
+>>>>>>> Stashed changes
     }
 
     const int delayMs = (cfg.maxFps > 0) ? (int)std::max(1.0, 1000.0 / (double)cfg.maxFps) : 0;
 
+<<<<<<< Updated upstream
     int frameIdx = 0;
     BoardDet lastBoard1, lastBoard2;
 
@@ -652,6 +955,8 @@ int run(const AppConfig& cfg) {
     auto lastFpsTs = std::chrono::high_resolution_clock::now();
     double fpsEma = 0.0;
 
+=======
+>>>>>>> Stashed changes
     while (true) {
         cv::Mat a, b;
         if (!cam1.readBgr(a) || !cam2.readBgr(b)) {
@@ -659,6 +964,7 @@ int run(const AppConfig& cfg) {
             continue;
         }
 
+<<<<<<< Updated upstream
         BallObs o1;
         BallObs o2;
 
@@ -701,6 +1007,30 @@ int run(const AppConfig& cfg) {
             }
             o2.areaPx = lastBoard2.areaRatio * (double)b.cols * (double)b.rows;
         }
+=======
+        HsvRange hsv = cfg.hsv;
+        int morph = cfg.morph;
+        double minAreaPx = cfg.minAreaPx;
+        if (cfg.tune) {
+            hsv.hMin = std::max(0, std::min(179, hMin));
+            hsv.sMin = std::max(0, std::min(255, sMin));
+            hsv.vMin = std::max(0, std::min(255, vMin));
+            hsv.hMax = std::max(0, std::min(179, hMax));
+            hsv.sMax = std::max(0, std::min(255, sMax));
+            hsv.vMax = std::max(0, std::min(255, vMax));
+            morph = std::max(0, morphR);
+            minAreaPx = std::max(0.0, (double)minArea);
+        }
+
+        BallObs o1;
+        BallObs o2;
+        if (cfg.useCuda) {
+            o1 = detectBallCuda(a, hsv, morph, minAreaPx);
+            o2 = detectBallCuda(b, hsv, morph, minAreaPx);
+        }
+        if (!o1.found) o1 = detectBallCpu(a, hsv, morph, minAreaPx);
+        if (!o2.found) o2 = detectBallCpu(b, hsv, morph, minAreaPx);
+>>>>>>> Stashed changes
 
         cv::Point3d X;
         bool have3d = false;
@@ -717,16 +1047,24 @@ int run(const AppConfig& cfg) {
             cv::Mat vb = b.clone();
 
             if (o1.found) {
+<<<<<<< Updated upstream
                 cv::circle(va, o1.centerPx, 6, cv::Scalar(0, 255, 0), 2);
             }
             if (o2.found) {
                 cv::circle(vb, o2.centerPx, 6, cv::Scalar(0, 255, 0), 2);
+=======
+                cv::circle(va, o1.centerPx, (int)std::max(2.0f, o1.radiusPx), cv::Scalar(0, 255, 0), 2);
+            }
+            if (o2.found) {
+                cv::circle(vb, o2.centerPx, (int)std::max(2.0f, o2.radiusPx), cv::Scalar(0, 255, 0), 2);
+>>>>>>> Stashed changes
             }
 
             if (have3d) {
                 std::ostringstream ss;
                 ss.setf(std::ios::fixed);
                 ss << std::setprecision(1);
+<<<<<<< Updated upstream
                 ss << "XYZ(mm)= [" << X.x << ", " << X.y << ", " << X.z << "]";
                 cv::putText(va, ss.str(), cv::Point(20, 40), cv::FONT_HERSHEY_SIMPLEX, 0.9, cv::Scalar(0, 255, 255), 2);
                 std::ostringstream zs;
@@ -750,11 +1088,24 @@ int run(const AppConfig& cfg) {
                 fs.setf(std::ios::fixed);
                 fs << std::setprecision(1) << "FPS=" << fpsEma;
                 cv::putText(va, fs.str(), cv::Point(20, 70), cv::FONT_HERSHEY_SIMPLEX, 0.7, cv::Scalar(255, 255, 0), 2);
+=======
+                ss << "X(mm)= [" << X.x << ", " << X.y << ", " << X.z << "]";
+                cv::putText(va, ss.str(), cv::Point(20, 40), cv::FONT_HERSHEY_SIMPLEX, 0.8, cv::Scalar(0, 255, 255), 2);
+>>>>>>> Stashed changes
             }
 
             cv::imshow("cam1", va);
             cv::imshow("cam2", vb);
 
+<<<<<<< Updated upstream
+=======
+            if (cfg.tune) {
+                cv::Mat m1 = makeMaskCpu(a, hsv, morph);
+                cv::Mat m2 = makeMaskCpu(b, hsv, morph);
+                cv::imshow("mask1", m1);
+                cv::imshow("mask2", m2);
+            }
+>>>>>>> Stashed changes
             const int k = cv::waitKey(1);
             if ((k & 0xFF) == 27) break;
         }
@@ -765,17 +1116,32 @@ int run(const AppConfig& cfg) {
                     << X.x << ',' << X.y << ',' << X.z << ','
                     << o1.centerPx.x << ',' << o1.centerPx.y << ','
                     << o2.centerPx.x << ',' << o2.centerPx.y << ','
+<<<<<<< Updated upstream
+=======
+                    << o1.radiusPx << ',' << o2.radiusPx << ','
+>>>>>>> Stashed changes
                     << o1.areaPx << ',' << o2.areaPx << "\n";
             }
         }
 
         if (delayMs > 0) std::this_thread::sleep_for(std::chrono::milliseconds(delayMs));
+<<<<<<< Updated upstream
         ++frameIdx;
+=======
+>>>>>>> Stashed changes
     }
 
     if (cfg.show) {
         cv::destroyWindow("cam1");
         cv::destroyWindow("cam2");
+<<<<<<< Updated upstream
+=======
+        if (cfg.tune) {
+            cv::destroyWindow("tune");
+            cv::destroyWindow("mask1");
+            cv::destroyWindow("mask2");
+        }
+>>>>>>> Stashed changes
     }
 
     return 0;

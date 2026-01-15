@@ -2,10 +2,10 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "Debug/capture.exe"
+			"path" : "Release/live_motion.exe"
 		},
 		{
-			"path" : "Debug/capture.pdb"
+			"path" : "Release/live_motion.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -35,7 +35,7 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 63,
+				"line" : 77,
 				"parent" : 0
 			},
 			{
@@ -67,21 +67,13 @@
 			{
 				"command" : 4,
 				"file" : 0,
-<<<<<<<< Updated upstream:build/.cmake/api/v1/reply/target-capture-Debug-b108b44024891461de05.json
-				"line" : 95,
-========
-				"line" : 93,
->>>>>>>> Stashed changes:build/.cmake/api/v1/reply/target-capture-Debug-f6bfd9892edb494023c6.json
+				"line" : 96,
 				"parent" : 0
 			},
 			{
 				"command" : 4,
 				"file" : 0,
-<<<<<<<< Updated upstream:build/.cmake/api/v1/reply/target-capture-Debug-b108b44024891461de05.json
-				"line" : 92,
-========
 				"line" : 90,
->>>>>>>> Stashed changes:build/.cmake/api/v1/reply/target-capture-Debug-f6bfd9892edb494023c6.json
 				"parent" : 0
 			},
 			{
@@ -105,11 +97,7 @@
 			{
 				"command" : 6,
 				"file" : 0,
-<<<<<<<< Updated upstream:build/.cmake/api/v1/reply/target-capture-Debug-b108b44024891461de05.json
-				"line" : 91,
-========
 				"line" : 89,
->>>>>>>> Stashed changes:build/.cmake/api/v1/reply/target-capture-Debug-f6bfd9892edb494023c6.json
 				"parent" : 0
 			}
 		]
@@ -120,7 +108,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "/DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++17 -MDd"
+					"fragment" : "/DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++17 -MD"
 				},
 				{
 					"backtrace" : 11,
@@ -146,7 +134,8 @@
 			},
 			"sourceIndexes" : 
 			[
-				0
+				0,
+				1
 			]
 		}
 	],
@@ -157,24 +146,24 @@
 			"id" : "mf_camera::@6890427a1f51a3e7e1df"
 		},
 		{
-			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
-		},
-		{
 			"backtrace" : 7,
 			"id" : "yaml-cpp::@c1fb6b535d5396bcd0b2"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
 		}
 	],
-	"id" : "capture::@6890427a1f51a3e7e1df",
+	"id" : "live_motion::@6890427a1f51a3e7e1df",
 	"link" : 
 	{
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "/DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -MDd",
+				"fragment" : "/DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -MD",
 				"role" : "flags"
 			},
 			{
-				"fragment" : "/machine:x64 /debug /INCREMENTAL /subsystem:console",
+				"fragment" : "/machine:x64 /INCREMENTAL:NO /subsystem:console",
 				"role" : "flags"
 			},
 			{
@@ -184,7 +173,7 @@
 			},
 			{
 				"backtrace" : 7,
-				"fragment" : "Debug\\mf_camera.lib",
+				"fragment" : "Release\\mf_camera.lib",
 				"role" : "libraries"
 			},
 			{
@@ -509,7 +498,7 @@
 			},
 			{
 				"backtrace" : 9,
-				"fragment" : "_deps\\yaml-cpp-build\\Debug\\yaml-cppd.lib",
+				"fragment" : "_deps\\yaml-cpp-build\\Release\\yaml-cpp.lib",
 				"role" : "libraries"
 			},
 			{
@@ -544,8 +533,8 @@
 		],
 		"language" : "CXX"
 	},
-	"name" : "capture",
-	"nameOnDisk" : "capture.exe",
+	"name" : "live_motion",
+	"nameOnDisk" : "live_motion.exe",
 	"paths" : 
 	{
 		"build" : ".",
@@ -557,7 +546,8 @@
 			"name" : "Source Files",
 			"sourceIndexes" : 
 			[
-				0
+				0,
+				1
 			]
 		}
 	],
@@ -566,7 +556,13 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "capture/main.cpp",
+			"path" : "live_motion/main.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "live_motion/live_motion_app.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],

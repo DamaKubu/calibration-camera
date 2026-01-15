@@ -78,8 +78,11 @@ add_executable(live_motion
     live_motion/main.cpp
     live_motion/live_motion_app.cpp
 )
+<<<<<<< Updated upstream
 add_executable(stereo_gpu_min tools/stereo_gpu_min.cpp)
 add_executable(single_red_tracking tools/single_red_tracking.cpp)
+=======
+>>>>>>> Stashed changes
 add_executable(camera_true_id camera_true_id.cpp)
 add_executable(stereo_extrinsic_from_pairs stereo_extrinsic_from_pairs.cpp)
 
@@ -87,7 +90,11 @@ add_executable(stereo_extrinsic_from_pairs stereo_extrinsic_from_pairs.cpp)
 # =============================
 # Link
 # =============================
+<<<<<<< Updated upstream
 foreach(target capture capture_multiple capture_intrinsic intrinsic extrinsic live_motion stereo_gpu_min single_red_tracking camera_true_id)
+=======
+foreach(target capture capture_multiple capture_intrinsic intrinsic extrinsic live_motion camera_true_id)
+>>>>>>> Stashed changes
     target_include_directories(${target} PRIVATE ${OpenCV_INCLUDE_DIRS})
     target_link_libraries(${target} PRIVATE ${OpenCV_LIBS})
 endforeach()
