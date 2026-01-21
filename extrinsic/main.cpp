@@ -1,7 +1,10 @@
-#include "extrinsic_app.h"
+#include <opencv2/opencv.hpp>
+#include <opencv2/calib3d.hpp>
 
+#include <algorithm>
+#include <filesystem>
+#include <iomanip>
 #include <iostream>
-<<<<<<< Updated upstream
 #include <map>
 #include <numeric>
 #include <set>
@@ -104,8 +107,6 @@ static bool parseShotIndex(const std::string& filename, int& idxOut) {
     idxOut = std::stoi(num);
     return true;
 }
-=======
->>>>>>> Stashed changes
 
 struct Quat {
     double w = 1.0;
@@ -281,7 +282,6 @@ static bool solvePnPBest(
 }
 
 int main(int argc, char** argv) {
-<<<<<<< Updated upstream
     std::string cameraId = "cam0";
     cv::Size pattern(8, 5);
     double squareMm = 65.0;
@@ -365,20 +365,12 @@ int main(int argc, char** argv) {
                 << "  Reads intrinsics from: <intrinsics_root>/<intrinsics_prefix><cam>/intrinsic.yml\\n"
                 << "  Writes: <session>/extrinsics.yml (cam_ref -> cam_i)\\n"
                 << "  Notes: 'pnp' works even if camera image sizes differ; 'stereo/refine' requires matching sizes for the pair.\\n";
-=======
-    capext::AppConfig cfg;
-    std::string err;
-    if (!capext::parseArgs(argc, argv, cfg, err)) {
-        if (err == "help") {
-            capext::printUsage(std::cout);
->>>>>>> Stashed changes
             return 0;
+        } else {
+            std::cerr << "Unknown arg: " << a << "\n";
+            return 2;
         }
-        std::cerr << "ERROR: " << err << "\n\n";
-        capext::printUsage(std::cerr);
-        return 2;
     }
-<<<<<<< Updated upstream
 
     // ---- Multi-camera session mode ----
     if (!sessionDir.empty()) {
@@ -871,7 +863,4 @@ int main(int argc, char** argv) {
     out.release();
 
     return 0;
-=======
-    return capext::run(cfg);
->>>>>>> Stashed changes
 }
