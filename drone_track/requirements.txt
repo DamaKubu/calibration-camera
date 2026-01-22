@@ -1,0 +1,4 @@
+numpy
+opencv-python
+# Optional (only needed if you want to parse arbitrary YAML beyond the OpenCV-matrix regex loader)
+pyyaml

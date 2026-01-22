@@ -1,0 +1,126 @@
+You are a senior computer vision engineer.
+
+Create a production-quality demo pipeline for detecting and tracking flying objects
+(drones vs birds) using two cheap USB cameras.
+
+GOAL
+- Bearing-only detection (direction-of-arrival), NOT triangulation
+- Demo-grade robustness, real-time capable
+- Accuracy target: stable bearings, correct drone vs bird rejection
+
+CONSTRAINTS
+- Cameras have barrel distortion
+- Calibration reprojection error ~1–2 pixels is acceptable
+- No hardware sync
+- Rolling shutter may exist
+- Use NV12 input format
+- Use luminance (Y plane) only
+- Python implementation (OpenCV + NumPy + optional PyTorch)
+- Avoid overengineering
+
+ARCHITECTURE OVERVIEW
+Each camera runs independently:
+Camera → Motion Detection → Tracking → Bearing Estimation → Temporal Smoothing → Classification
+
+Two cameras are fused by bearing agreement only (no triangulation).
+
+IMPLEMENT THE FOLLOWING COMPONENTS
+
+1. INPUT & PREPROCESSING
+- Accept NV12 frames
+- Extract Y (luminance) plane
+- Optional Gaussian blur (σ ≈ 1.0)
+- Do NOT convert to RGB
+
+2. MOTION-BASED CANDIDATE GENERATION
+- Use frame differencing or background subtraction
+- Threshold motion magnitude
+- Extract connected components
+- Filter blobs by:
+  - Area (small flying objects)
+  - Aspect ratio
+  - Minimum pixel velocity
+- Output bounding boxes and centroids
+
+3. MULTI-OBJECT TRACKING
+- Implement SORT-style tracking
+- Kalman filter state: (x, y, vx, vy)
+- Hungarian association by centroid distance
+- Track lifecycle:
+  - Minimum age before valid
+  - Miss tolerance
+- Maintain per-track history:
+  - Positions
+  - Velocities
+  - Bounding box areas
+
+4. BEARING ESTIMATION (CORE GEOMETRY)
+For each valid track:
+- Undistort the centroid ONLY (not full image)
+- Convert pixel to normalized camera ray using intrinsics
+- Convert camera ray to world frame using camera rotation
+- Output unit bearing vector
+- Apply temporal smoothing (EMA or Kalman)
+
+5. DRONE VS BIRD DISCRIMINATION (TRACK-LEVEL)
+DO NOT rely on per-frame CNN alone.
+
+Implement motion-based features:
+- Velocity variance
+- Acceleration variance
+- Bounding box area variance
+
+Classification logic:
+- Birds: oscillatory motion, high acceleration variance
+- Drones: smooth motion, stable speed and size
+
+Combine features into a confidence score ∈ [0,1]
+Apply temporal smoothing to class score
+
+OPTIONAL:
+- Allow integration of a weak CNN that operates on track crops
+- CNN output is combined with motion score
+
+6. PER-CAMERA OUTPUT GATING
+A track produces output only if:
+- Track age ≥ threshold
+- Class score ≥ threshold
+- Bearing estimate is stable
+
+7. TWO-CAMERA FUSION (NO TRIANGULATION)
+- Time-align tracks with tolerance
+- Compute angular difference between bearings
+- Accept pairs with angular agreement
+- Output:
+  - Bearings from each camera
+  - Confidence score
+- Do NOT estimate depth or position
+
+8. DEMO VISUALIZATION
+- Draw bearings as arrows or rays
+- Show confidence indicator
+- Show track ID and class score
+- Emphasize stability over precision
+
+NON-GOALS (DO NOT IMPLEMENT)
+- Full-frame CNN detection
+- Sub-pixel calibration optimization
+- High-order distortion models
+- Hard triangulation
+- Bundle adjustment
+
+DELIVERABLES
+- Clean Python code organized into modules:
+  - motion.py
+  - tracking.py
+  - bearing.py
+  - classification.py
+  - fusion.py
+  - main_demo.py
+- Reasonable default thresholds
+- Clear comments explaining design choices
+- Code should run on recorded video or live USB cameras
+
+IMPORTANT
+Favor robustness, temporal consistency, and clarity over theoretical optimality.
+This is a demo system designed to work well with cheap cameras.
